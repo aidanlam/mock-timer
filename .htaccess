@@ -1,0 +1,25 @@
+
+#RewriteRule ^cfg.html              index.php    [L]
+#RewriteRule ^event.html            index.php    [L]
+RewriteRule ^css/                  -            [L]
+RewriteRule ^img/                  -            [L]
+RewriteRule ^js/                   -            [L]
+RewriteRule ^snd/                  -            [L]
+RewriteRule ^sync.php              -            [L]
+RewriteRule ^c/ccffgg              cfg.html     [L]
+RewriteRule ^tst.*                 event_tst.html   [L]
+RewriteRule ^[A-Za-z0-9-]{2,}$     event.html   [L]
+RewriteRule ^[A-Za-z0-9-]{2,}/     event.html   [L]
+
+#RewriteRule ^(event|ccffgg)/*$ - [L]
+#RewriteRule ^(z|y)/*$ ccffgg  [L]
+
+#RewriteRule ^i([a-z0-9-]+)/*$ event  [,L]
+
+<FilesMatch "\.(html|htm|js|css|php)>
+FileETag None
+Header unset ETag
+Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+Header set Pragma "no-cache"
+Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+</FilesMatch>

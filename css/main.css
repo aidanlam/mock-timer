@@ -1,0 +1,79 @@
+
+
+body, .config {
+  font-family: verdana, arial;
+  font-size:  20pt;
+}
+
+a,.config {
+  color: DeepSkyBlue;
+}
+
+.body, .timer {
+  text-align: center;
+  font-weight: bold;
+}
+
+#timer_mss {
+  border: 0px solid white;
+  margin-top:   5%;
+  line-height: 100%;
+  text-outline: 2px 2px #303030;
+  text-shadow:  2px  2px  2px  #000,
+               -2px  2px  2px  #000,
+                2px -2px  2px  #000,
+               -2px -2px  2px  #000;
+}
+
+table.timer_caption {
+  width: 100%;
+  border: 0;
+}
+
+tr.timer_caption {
+  width: 100%;
+  border: 0;
+  font-weight: bold;
+}
+
+td.timer_caption {
+  width: 80%;
+  text-align: center;
+}
+
+td.timer_caption_side {
+  width: 10%;
+}
+
+#timer_caption_left, #timer_caption_right {
+  height: 100%;
+  border-radius: 50%;
+  display: none;
+}
+
+#timer_bargraph {
+  margin: 4px 0px;
+  height: 1px;
+  width: 0px;
+}
+
+#timer_note {
+  text-align: left;
+  font-size:  6pt;
+}
+
+#admin {
+  display: none;
+}
+
+
+input.config_event {
+  width: 4em;
+  text-align: right;
+}
+
+table.events_list {
+  cellBorder: 1px;
+}
+
+

@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <link href="/timer/css/main.css" rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div class="body" id="body">
+      <div class="timer">
+        <div id="timer_head_text" ></div>
+        <div id="timer_mss"    ></div>
+        <table class="timer_caption"><tr class="timer_caption">
+          <td class="timer_caption_side"><div id="timer_caption_left"  ><img id="timer_logo_left"  src="/timer/img/usac_logo.png" border=0  /></div></td>
+          <td class="timer_caption"     ><div id="timer_caption"       ></div></td>
+          <td class="timer_caption_side"><div id="timer_caption_right" ><img id="timer_logo_right" src="/timer/img/usac_logo.png" border=0  /></div></td>
+        </tr></table>
+        <div id="timer_bargraph"  ></div>
+        <div id="timer_note"      ></div>
+      </div>
+      <div class="config" id="admin">
+        <div><br/>Timer Adjustments: (ms)</div>
+        <button class="config" id="rev3_btn">REV</button>&nbsp;
+        <button class="config" id="rev2_btn">REV</button>&nbsp;
+        <button class="config" id="rev1_btn">REV</button>&nbsp;
+        <button class="config" id="fwd1_btn">FWD</button>&nbsp;
+        <button class="config" id="fwd2_btn">FWD</button>&nbsp;
+        <button class="config" id="fwd3_btn">FWD</button>
+        <div><br/>Start/Stop Timer:</div>
+        <button class="config" id="start_btn">Start Event</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="config" id="stop_btn">Stop Event</button>
+        <div><br/>Reconfigure Timer:</div>
+        <div class="config" id="config" >
+          <input class="config config_event" id="config_climb_time" /><span>(secs) Climb Time</span><br/>
+          <input class="config config_event" id="config_trans_time" /><span>(secs) Transition Time</span><br/>
+          <div>&nbsp;</div>
+          <input class="config config_event" id="config_tz_offset"  /><span>(hrs) Timezone Offset<br/>(e.g. -5 for EST, -4 for EDT, ...)</span><br/>
+          <div>&nbsp;</div>
+          <input class="config config_event" id="config_head_text"  /><span>Header Text</span><br/>
+          <div>&nbsp;</div>
+          <button class="config" id="update_btn">Update Config</button>
+        </div>
+        <div>&nbsp;</div>
+        <div><a href="https://docs.google.com/document/d/1HRaZuvMOFH35sErrzWpmjiSJdn-WduvneBiDh0a5Zdo">docs</a></div>
+          <div>&nbsp;</div>
+      </div>
+    </div>
+  </body>
+<script type="text/javascript" src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+<script type="text/javascript" src="/timer/js/stringformat-1.09.js"></script>
+<script type="text/javascript" src="/timer/js/sound.js"></script>
+<script type="text/javascript" src="/timer/js/event.js"></script>
+</html>
