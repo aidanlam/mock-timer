@@ -18,11 +18,10 @@ a,.config {
   border: 0px solid white;
   margin-top:   5%;
   line-height: 100%;
-  text-outline: 2px 2px #303030;
-  text-shadow:  2px  2px  2px  #000,
-               -2px  2px  2px  #000,
-                2px -2px  2px  #000,
-               -2px -2px  2px  #000;
+  text-shadow:  1px  1px  0px  #000,
+               -1px  1px  0px  #000,
+                1px -1px  0px  #000,
+               -1px -1px  0px  #000;
 }
 
 table.timer_caption {
@@ -69,6 +68,12 @@ td.timer_caption_side {
 
 input.config_event {
   width: 4em;
+  text-align: right;
+  color: #444;
+}
+
+input#config_head_text {
+  width: 20em;
   text-align: right;
 }
 
