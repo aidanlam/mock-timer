@@ -24,17 +24,39 @@ var thresholdTimerForceSkewUpdateMS  = 400;
 // ------------------------------------------------
 // --- Parse the URL
 
+//var pathElements = document.location.pathname.split("/");
+//var basePath     = "/" + pathElements[1] + "/";
+
+
 var pathElements = document.location.pathname.split("/");
-var basePath     = "/" + pathElements[1] + "/";
+var lastPathElement = pathElements.pop();
+var basePath = pathElements.join("/");
 
-var eventElements = pathElements[2].split("-");
-var eventName     = eventElements.shift();
+var params = new URLSearchParams(document.location.search.substring(1));
+var paramCode = params.get("code");
 
-var enReSync     = eventElements.indexOf("resync")>=0;
-var enSound      = eventElements.indexOf("s")>=0;
-var enTod        = eventElements.indexOf("tod")>=0;
-var enSlot       = eventElements.indexOf("slot")>=0;
-var enDbg        = eventElements.indexOf("dbg")>=0;
+var argElements = lastPathElement.split("-");
+if (paramCode && paramCode.length) {
+  argElements = paramCode.split("-");
+  basePath = document.location.pathname + "?code=";
+} else {
+  basePath += "/";
+}
+
+console.log(pathElements);
+console.log(argElements);
+console.log(basePath);
+
+//var eventElements = pathElements[2].split("-");
+
+var eventName     = argElements.shift();
+
+var enReSync     = argElements.indexOf("resync")>=0;
+var enSound      = argElements.indexOf("s")>=0;
+var enTod        = argElements.indexOf("tod")>=0;
+var enSlot       = argElements.indexOf("slot")>=0;
+var enDbg        = argElements.indexOf("dbg")>=0;
+var enSimple     = argElements.indexOf("simple")>=0;
 var isAdmin      = false;
 function log_args() {
   console.log(eventName 
@@ -43,6 +65,10 @@ function log_args() {
     );
 }
 log_args();
+
+var enLogo       = ! enSimple;
+var enCaption    = ! enSimple;
+var enHeader     = ! enSimple;
 
 
 var baseURL = document.location.origin + basePath ;
@@ -54,7 +80,7 @@ function setIsAdmin() {
   if (data && data.password) {
     apw = data.password;
   }
-  var newIsAdmin = eventElements.indexOf("p"+apw)>=0;
+  var newIsAdmin = argElements.indexOf("p"+apw)>=0;
   if (newIsAdmin != isAdmin) {
     isAdmin=newIsAdmin;
     log_args();
@@ -559,6 +585,14 @@ function fwdEventCB(adjMs) { revfwdEventCB("fwd",0-adjMs); }
 // ------------------------------------------------
 // --- Listeners
 
+function adjSlotOffset(val) {
+  console.log(val);
+  startStopEventCB(data.start - 1000*val*(data.climbTime+data.transTime));
+}
+
+// ------------------------------------------------
+// --- Listeners
+
 var setupListenersDone = false;
 
 function setupListeners() {
@@ -589,6 +623,15 @@ function setupListeners() {
     fwd1_btn.innerHTML=String.format("+{0}",adjMs1);
     fwd2_btn.innerHTML=String.format("+{0}",adjMs2);
     fwd3_btn.innerHTML=String.format("+{0}",adjMs3);
+    
+    var slotm10_btn  = document.getElementById("slotm10_btn");
+    var slotm01_btn  = document.getElementById("slotm01_btn");
+    var slotp10_btn  = document.getElementById("slotp10_btn");
+    var slotp01_btn  = document.getElementById("slotp01_btn");
+    slotm10_btn.addEventListener("click", function(e){ adjSlotOffset(-10); });
+    slotm01_btn.addEventListener("click", function(e){ adjSlotOffset( -1); });
+    slotp10_btn.addEventListener("click", function(e){ adjSlotOffset(+10); });
+    slotp01_btn.addEventListener("click", function(e){ adjSlotOffset( +1); });
   }
 }
 // ------------------------------------------------
@@ -609,7 +652,7 @@ function writeTimerDOM(iterationOddPhase,timeStr,timeColor,captionStr) {
   // --- Head Text
   var timerHeadTextEl      = document.getElementById("timer_head_text");
   var hasHeadText = (data==null) ? "" : (data.headText.length>0) ? 1 : 0;
-  if (hasHeadText) {
+  if (enHeader && hasHeadText) {
     timerHeadTextEl.style.fontSize          = timerHeadTextFontSize + "pt";
     timerHeadTextEl.innerHTML               = data.headText;
   } else {
@@ -626,21 +669,27 @@ function writeTimerDOM(iterationOddPhase,timeStr,timeColor,captionStr) {
 
   // --- Caption
   var timerCaptionEl  = document.getElementById("timer_caption");
-  timerCaptionEl.style.fontSize     = timerCaptionFontSize + "pt";
-  timerCaptionEl.innerHTML          = captionStr.trim();
+  if (enCaption) {
+    timerCaptionEl.style.fontSize     = timerCaptionFontSize + "pt";
+    timerCaptionEl.innerHTML          = captionStr.trim();
+  } else {
+    timerCaptionEl.style.display = "none";
+  }
 
   // --- Logos
-  document.getElementById("timer_caption_left" ).style.display = "block";
-  document.getElementById("timer_caption_right").style.display = "block";
-  var timerLogoLtEl = document.getElementById("timer_logo_left");
-  timerLogoLtEl.style.opacity = 1-iterationOddPhase;
-  timerLogoLtEl.width  = logoSize;
-  timerLogoLtEl.height = logoSize;
-  var timerLogoRtEl = document.getElementById("timer_logo_right");
-  timerLogoRtEl.style.opacity =   iterationOddPhase;
-  timerLogoRtEl.width  = logoSize;
-  timerLogoRtEl.height = logoSize;
-
+  if (enLogo) {
+    document.getElementById("timer_caption_left" ).style.display = "block";
+    document.getElementById("timer_caption_right").style.display = "block";
+    var timerLogoLtEl = document.getElementById("timer_logo_left");
+    timerLogoLtEl.style.opacity = 1-iterationOddPhase;
+    timerLogoLtEl.width  = logoSize;
+    timerLogoLtEl.height = logoSize;
+    var timerLogoRtEl = document.getElementById("timer_logo_right");
+    timerLogoRtEl.style.opacity =   iterationOddPhase;
+    timerLogoRtEl.width  = logoSize;
+    timerLogoRtEl.height = logoSize;
+  }
+  
   // --- BarGraph --- show how long since last skew update (window width means 5min)
   var timerBargraphEl = document.getElementById("timer_bargraph");
   timerBargraphEl.style.width = Math.max( 0, Math.min( winWidth-20,  Math.floor( winWidth * secsSinceLastSkewCalc/(5*60) ) ) ) + "px";
@@ -658,7 +707,11 @@ function writeTimerDOM(iterationOddPhase,timeStr,timeColor,captionStr) {
   //noteStr += String.format("intv={0:0}s |",Math.round(skewCurrentInterval/1000)) + noteStrSep;
   noteStr += skewDebugStr;
   var timerNoteEl     = document.getElementById("timer_note");
-  timerNoteEl.innerHTML          = noteStr;
+  if (enSimple) {
+    timerNoteEl.innerHTML = "";    
+  } else {
+    timerNoteEl.innerHTML = noteStr;
+  }
 
 }
 

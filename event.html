@@ -1,6 +1,6 @@
 <html>
   <head>
-    <link href="/timer/css/main.css" rel='stylesheet' type='text/css'>
+    <link href="css/main.css" rel='stylesheet' type='text/css'>
   </head>
   <body>
     <div class="body" id="body">
@@ -8,21 +8,39 @@
         <div id="timer_head_text" ></div>
         <div id="timer_mss"    ></div>
         <table class="timer_caption"><tr class="timer_caption">
-          <td class="timer_caption_side"><div id="timer_caption_left"  ><img id="timer_logo_left"  src="/timer/img/usac_logo.png" border=0  /></div></td>
+          <td class="timer_caption_side"><div id="timer_caption_left"  ><img id="timer_logo_left"  src="img/usac_logo.png" border=0  /></div></td>
           <td class="timer_caption"     ><div id="timer_caption"       ></div></td>
-          <td class="timer_caption_side"><div id="timer_caption_right" ><img id="timer_logo_right" src="/timer/img/usac_logo.png" border=0  /></div></td>
+          <td class="timer_caption_side"><div id="timer_caption_right" ><img id="timer_logo_right" src="img/usac_logo.png" border=0  /></div></td>
         </tr></table>
         <div id="timer_bargraph"  ></div>
         <div id="timer_note"      ></div>
       </div>
       <div class="config" id="admin">
+
         <div><br/>Timer Adjustments: (ms)</div>
+        <div>
         <button class="config" id="rev3_btn">REV</button>&nbsp;
         <button class="config" id="rev2_btn">REV</button>&nbsp;
         <button class="config" id="rev1_btn">REV</button>&nbsp;
         <button class="config" id="fwd1_btn">FWD</button>&nbsp;
         <button class="config" id="fwd2_btn">FWD</button>&nbsp;
         <button class="config" id="fwd3_btn">FWD</button>
+        </div>
+
+        <div><br/>Slot Offset Adjustment:</div>
+        <div>
+        <button class="config" id="slotm10_btn">-10</button>&nbsp;
+        <button class="config" id="slotm01_btn">-01</button>&nbsp;
+        <button class="config" id="slotp01_btn">+01</button>&nbsp;
+        <button class="config" id="slotp10_btn">+10</button>
+        </div>
+
+        <div><br/>Timer Type:</div>
+        <div>
+        <button class="config" id="type_cont">Continuous</button>&nbsp;
+        <button class="config" id="type_once">Single Interval</button>
+        </div>
+
         <div><br/>Start/Stop Timer:</div>
         <button class="config" id="start_btn">Start Event</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="config" id="stop_btn">Stop Event</button>
         <div><br/>Reconfigure Timer:</div>
@@ -44,7 +62,7 @@
     </div>
   </body>
 <script type="text/javascript" src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
-<script type="text/javascript" src="/timer/js/stringformat-1.09.js"></script>
-<script type="text/javascript" src="/timer/js/sound.js"></script>
-<script type="text/javascript" src="/timer/js/event.js"></script>
+<script type="text/javascript" src="js/stringformat-1.09.js"></script>
+<script type="text/javascript" src="js/sound.js"></script>
+<script type="text/javascript" src="js/event.js"></script>
 </html>
