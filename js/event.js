@@ -777,8 +777,13 @@ function updateTimerDOM(){
   var slotNum           = iterationNum % 100;
   var countdownTimeSec  = intervalSec - intraIntervalTimeSec;
   
+  var playEnd = false;
   if (data.onceType && iterationNum>0) {
+    if (intraIntervalTimeSec<2) {
+      playEnd = true;
+    }
     iterationOdd = 0;
+    iterationNum = 0;
     slotNum = 0;
     countdownTimeSec = 0;
   }
@@ -819,6 +824,8 @@ function updateTimerDOM(){
       if (countdownTimeSec > (data.climbTime-2)) {
         if (data.transTime>0) { playSound("begin");    }
         else                  { playSound("endBegin"); }
+      } else if (playEnd) {
+        playSound("end");
       }
       captionStr = (data.transTime>0) ? "CLIMB" : "";
       timeColor = (countdownTimeSec>60) ? "black" : "red";

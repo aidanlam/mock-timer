@@ -3,6 +3,7 @@ var audioContext = null;
 
 var sounds = {
     "begin":           { url: "snd/cs1.wav" },
+    "end":             { url: "snd/ce.wav" },
     "oneMinWarning":   { url: "snd/c60.wav" },
     "tenSecWarning":   { url: "snd/c10.wav" },
     "beginTransition": { url: "snd/ts.wav" },
