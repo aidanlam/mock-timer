@@ -583,13 +583,23 @@ function revEventCB(adjMs) { revfwdEventCB("rev",  adjMs); }
 function fwdEventCB(adjMs) { revfwdEventCB("fwd",0-adjMs); }
 
 // ------------------------------------------------
-// --- Listeners
+// --- Slot Adj Events
 
 function adjSlotOffset(val) {
   console.log(val);
   startStopEventCB(data.start - 1000*val*(data.climbTime+data.transTime));
 }
+ 
+// ------------------------------------------------
+// --- Type (once/cont) Events
 
+function setOnceType(val) {
+  console.log("OnceType: "+val);
+  firebase.database().ref('event/' + eventName).update({
+    onceType: val
+  }).then(getAndProcessEvent());
+}
+ 
 // ------------------------------------------------
 // --- Listeners
 
@@ -632,6 +642,9 @@ function setupListeners() {
     slotm01_btn.addEventListener("click", function(e){ adjSlotOffset( -1); });
     slotp10_btn.addEventListener("click", function(e){ adjSlotOffset(+10); });
     slotp01_btn.addEventListener("click", function(e){ adjSlotOffset( +1); });
+    
+    document.getElementById("type_cont").addEventListener("click", function(e) {setOnceType(0);});
+    document.getElementById("type_once").addEventListener("click", function(e) {setOnceType(1);});
   }
 }
 // ------------------------------------------------
@@ -747,8 +760,12 @@ function updateTimerDOM(){
 
 
   var msPerSec = 1000;
+  
+  if (data.onceType==null) {
+    data.onceType = 0;
+  }
 
-  var intervalSec   = data.climbTime + data.transTime;
+  var intervalSec   = data.climbTime + (data.onceType ? 0 : data.transTime);
   var adjNowMS  = nowAdjustedForSkewMS();
   var secondsSinceStart    = Math.floor( (adjNowMS - data.start) / msPerSec);
   var millisecondsSinceSec =             (adjNowMS - data.start) % msPerSec;
@@ -759,6 +776,12 @@ function updateTimerDOM(){
   var iterationOdd      = iterationNum % 2;
   var slotNum           = iterationNum % 100;
   var countdownTimeSec  = intervalSec - intraIntervalTimeSec;
+  
+  if (data.onceType && iterationNum>0) {
+    iterationOdd = 0;
+    slotNum = 0;
+    countdownTimeSec = 0;
+  }
 
   var isClimb = (countdownTimeSec > data.climbTime) ? 0 : 1;
   if (!isClimb) { countdownTimeSec -=  data.climbTime; }
@@ -835,6 +858,8 @@ function clearTimerDOM(){
   console.log("clearing timer dom");
   if (data == null) {
     writeTimerDOM(0, "",     "red",  "Invalid timer name:<br/>"+eventName);
+  } else if (data.onceType) {
+    writeTimerDOM(0, mssStr(data.climbTime), "grey", "(timer not started)"+(enTod?"<br/>&nbsp;":""));
   } else {
     writeTimerDOM(0, "0:00", "grey", "(timer not started)"+(enTod?"<br/>&nbsp;":""));
   }
