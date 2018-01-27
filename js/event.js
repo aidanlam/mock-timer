@@ -57,10 +57,14 @@ var enTod        = argElements.indexOf("tod")>=0;
 var enSlot       = argElements.indexOf("slot")>=0;
 var enDbg        = argElements.indexOf("dbg")>=0;
 var enSimple     = argElements.indexOf("simple")>=0;
+
 var isAdmin      = false;
+var isCtl        = false;
+
 function log_args() {
   console.log(eventName 
     +" isAdmin="+isAdmin 
+    +" isCtl="+isCtl 
     +" enSound="+enSound 
     );
 }
@@ -83,6 +87,17 @@ function setIsAdmin() {
   var newIsAdmin = argElements.indexOf("p"+apw)>=0;
   if (newIsAdmin != isAdmin) {
     isAdmin=newIsAdmin;
+    log_args();
+  }
+}
+function setIsCtl() {
+  var cpw="not/ever";
+  if (data && data.ctlCode) {
+    cpw = data.ctlCode;
+  }
+  var newIsCtl = argElements.indexOf("p"+cpw)>=0;
+  if (newIsCtl != isCtl) {
+    isCtl=newIsCtl;
     log_args();
   }
 }
@@ -176,6 +191,8 @@ function processEvent() {
     //console.log(data)
   }
   setIsAdmin();
+  setIsCtl();
+  document.getElementById("control").style.display = (isAdmin || isCtl) ? "block" : "none";
   document.getElementById("admin").style.display = isAdmin ? "block" : "none";
   setupListeners();
 }
@@ -548,6 +565,9 @@ function updateConfigDOM(){
     document.getElementById("config_trans_time").value = data.transTime;
     document.getElementById("config_tz_offset").value  = data.tzOffset;
     document.getElementById("config_head_text").value  = data.headText;
+    
+    document.getElementById("type_cont").style.fontWeight = data.onceType ? "normal" : "bold";
+    document.getElementById("type_once").style.fontWeight = data.onceType ? "bold" : "normal";
   }
 };
 
@@ -606,45 +626,48 @@ function setOnceType(val) {
 var setupListenersDone = false;
 
 function setupListeners() {
-  if (isAdmin && ! setupListenersDone) {
-    var update_btn = document.getElementById("update_btn");
-    var start_btn  = document.getElementById("start_btn");
-    var stop_btn   = document.getElementById("stop_btn");
-    var rev3_btn    = document.getElementById("rev3_btn");
-    var rev2_btn    = document.getElementById("rev2_btn");
-    var rev1_btn    = document.getElementById("rev1_btn");
-    var fwd1_btn    = document.getElementById("fwd1_btn");
-    var fwd2_btn    = document.getElementById("fwd2_btn");
-    var fwd3_btn    = document.getElementById("fwd3_btn");
-    update_btn.addEventListener("click", function(e){ updateConfigCB();   });
-    start_btn.addEventListener ("click", function(e){ startEventCB();     });
-    stop_btn.addEventListener  ("click", function(e){ stopEventCB();      });
-    rev3_btn.addEventListener  ("click", function(e){ revEventCB(adjMs3); });
-    rev2_btn.addEventListener  ("click", function(e){ revEventCB(adjMs2); });
-    rev1_btn.addEventListener  ("click", function(e){ revEventCB(adjMs1); });
-    fwd1_btn.addEventListener  ("click", function(e){ fwdEventCB(adjMs1); });
-    fwd2_btn.addEventListener  ("click", function(e){ fwdEventCB(adjMs2); });
-    fwd3_btn.addEventListener  ("click", function(e){ fwdEventCB(adjMs3); });
+  if (! setupListenersDone) {
+    if (isAdmin || isCtl) {
+      document.getElementById("start_btn").addEventListener ("click", function(e){ startEventCB();});
+      document.getElementById("stop_btn").addEventListener  ("click", function(e){ stopEventCB(); });
+    }
+    if (isAdmin) {
+      var update_btn = document.getElementById("update_btn");
+      var rev3_btn    = document.getElementById("rev3_btn");
+      var rev2_btn    = document.getElementById("rev2_btn");
+      var rev1_btn    = document.getElementById("rev1_btn");
+      var fwd1_btn    = document.getElementById("fwd1_btn");
+      var fwd2_btn    = document.getElementById("fwd2_btn");
+      var fwd3_btn    = document.getElementById("fwd3_btn");
+      update_btn.addEventListener("click", function(e){ updateConfigCB();   });
+      rev3_btn.addEventListener  ("click", function(e){ revEventCB(adjMs3); });
+      rev2_btn.addEventListener  ("click", function(e){ revEventCB(adjMs2); });
+      rev1_btn.addEventListener  ("click", function(e){ revEventCB(adjMs1); });
+      fwd1_btn.addEventListener  ("click", function(e){ fwdEventCB(adjMs1); });
+      fwd2_btn.addEventListener  ("click", function(e){ fwdEventCB(adjMs2); });
+      fwd3_btn.addEventListener  ("click", function(e){ fwdEventCB(adjMs3); });
+
+      rev3_btn.innerHTML=String.format("-{0}",adjMs3);
+      rev2_btn.innerHTML=String.format("-{0}",adjMs2);
+      rev1_btn.innerHTML=String.format("-{0}",adjMs1);
+      fwd1_btn.innerHTML=String.format("+{0}",adjMs1);
+      fwd2_btn.innerHTML=String.format("+{0}",adjMs2);
+      fwd3_btn.innerHTML=String.format("+{0}",adjMs3);
+
+      var slotm10_btn  = document.getElementById("slotm10_btn");
+      var slotm01_btn  = document.getElementById("slotm01_btn");
+      var slotp10_btn  = document.getElementById("slotp10_btn");
+      var slotp01_btn  = document.getElementById("slotp01_btn");
+      slotm10_btn.addEventListener("click", function(e){ adjSlotOffset(-10); });
+      slotm01_btn.addEventListener("click", function(e){ adjSlotOffset( -1); });
+      slotp10_btn.addEventListener("click", function(e){ adjSlotOffset(+10); });
+      slotp01_btn.addEventListener("click", function(e){ adjSlotOffset( +1); });
+
+      document.getElementById("type_cont").addEventListener("click", function(e) {setOnceType(0);});
+      document.getElementById("type_once").addEventListener("click", function(e) {setOnceType(1);});
+    }
     setupListenersDone=true;
     console.log("setupListeners: done");
-    rev3_btn.innerHTML=String.format("-{0}",adjMs3);
-    rev2_btn.innerHTML=String.format("-{0}",adjMs2);
-    rev1_btn.innerHTML=String.format("-{0}",adjMs1);
-    fwd1_btn.innerHTML=String.format("+{0}",adjMs1);
-    fwd2_btn.innerHTML=String.format("+{0}",adjMs2);
-    fwd3_btn.innerHTML=String.format("+{0}",adjMs3);
-    
-    var slotm10_btn  = document.getElementById("slotm10_btn");
-    var slotm01_btn  = document.getElementById("slotm01_btn");
-    var slotp10_btn  = document.getElementById("slotp10_btn");
-    var slotp01_btn  = document.getElementById("slotp01_btn");
-    slotm10_btn.addEventListener("click", function(e){ adjSlotOffset(-10); });
-    slotm01_btn.addEventListener("click", function(e){ adjSlotOffset( -1); });
-    slotp10_btn.addEventListener("click", function(e){ adjSlotOffset(+10); });
-    slotp01_btn.addEventListener("click", function(e){ adjSlotOffset( +1); });
-    
-    document.getElementById("type_cont").addEventListener("click", function(e) {setOnceType(0);});
-    document.getElementById("type_once").addEventListener("click", function(e) {setOnceType(1);});
   }
 }
 // ------------------------------------------------

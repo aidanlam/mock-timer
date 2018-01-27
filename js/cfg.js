@@ -17,7 +17,19 @@ var database = firebase.database();
 // --- Parse the URL
         
 var pathElements = document.location.pathname.split("/");
-var basePath     = "/" + pathElements[1] + "/";
+var lastPathElement = pathElements.pop();
+var basePath = pathElements.join("/");
+
+var params = new URLSearchParams(document.location.search.substring(1));
+var paramCode = params.get("code");
+
+var argElements = lastPathElement.split("-");
+if (paramCode && paramCode.length) {
+  argElements = paramCode.split("-");
+  basePath = document.location.pathname + "?code=";
+} else {
+  basePath += "/";
+}
 
 // ------------------------------------------------
 // --- Create and display list of Events
@@ -46,7 +58,8 @@ function getEvents(){
     th.insertCell(-1).innerHTML = "Trans";
     th.insertCell(-1).innerHTML = "tzOff";
     th.insertCell(-1).innerHTML = "HdrTxt";
-    th.insertCell(-1).innerHTML = "pw";
+    th.insertCell(-1).innerHTML = "admPw";
+    th.insertCell(-1).innerHTML = "ctlPw";
     th.insertCell(-1).innerHTML = "";
     th.insertCell(-1).innerHTML = "";
     th.insertCell(-1).innerHTML = "";
@@ -114,6 +127,12 @@ function getEvents(){
       el.innerHTML = event.password;
       el.className = "config";
       td.appendChild(el);
+      
+      td = tr.insertCell(-1);
+      el = document.createElement("bold");
+      el.innerHTML = event.ctlCode;
+      el.className = "config";
+      td.appendChild(el);
 
       td = tr.insertCell(-1);
       el = document.createElement("a");
@@ -161,13 +180,14 @@ function deleteEvent(name){
 // ------------------------------------------------
 // --- CREATE Event
 
-function createEvent(name, climbTime, transTime, tzOffset, headText, password){
+function createEvent(name, climbTime, transTime, tzOffset, headText, password, ctlCode){
   firebase.database().ref('event/' + name).set({
     climbTime: parseInt(climbTime),
     transTime: parseInt(transTime),
     tzOffset:  parseFloat(tzOffset),
     headText:  headText,
-    password:  password
+    password:  password,
+    ctlCode:   ctlCode
   });
   getEvents();
 };
@@ -181,8 +201,9 @@ createEventBtn.addEventListener('click', function(e) {
   var headText   = document.getElementById("event_head_text").value;
   var password   = document.getElementById("event_password").value;
   var headText   = document.getElementById("event_head_text").value;
+  var ctlCode    = document.getElementById("event_ctl_code").value;
 
-  createEvent(name, climbTime, transTime, tzOffset, headText, password)
+  createEvent(name, climbTime, transTime, tzOffset, headText, password, ctlCode)
 
 });
 
