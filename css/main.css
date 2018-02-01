@@ -64,6 +64,9 @@ td.timer_caption_side {
 #admin {
   display: none;
 }
+#control {
+  display: none;
+}
 
 
 input.config_event {
