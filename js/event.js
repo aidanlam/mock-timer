@@ -845,8 +845,9 @@ function updateTimerDOM(){
 
     if (isClimb) {
       if (countdownTimeSec > (data.climbTime-2)) {
-        if (data.transTime>0) { playSound("begin");    }
-        else                  { playSound("endBegin"); }
+        if (data.onceType)         { playSound("begin");    }
+        else if (data.transTime>0) { playSound("begin");    }
+        else                       { playSound("endBegin"); }
       } else if (playEnd) {
         playSound("end");
       }
