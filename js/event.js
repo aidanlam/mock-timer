@@ -797,7 +797,7 @@ function updateTimerDOM(){
   var intraIntervalTimeSec =            secondsSinceStart % intervalSec ;
 
   var iterationOdd      = iterationNum % 2;
-  var slotNum           = (iterationNum + 10000) % 100;
+  var slotNum           = (iterationNum + 1000) % 100;
   var countdownTimeSec  = intervalSec - intraIntervalTimeSec;
   
   var playEnd = false;
