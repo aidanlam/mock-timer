@@ -18,6 +18,7 @@ var database = firebase.database();
         
 var pathElements = document.location.pathname.split("/");
 var lastPathElement = pathElements.pop();
+var lastPathElement = pathElements.pop();
 var basePath = pathElements.join("/");
 
 var params = new URLSearchParams(document.location.search.substring(1));
@@ -30,6 +31,8 @@ if (paramCode && paramCode.length) {
 } else {
   basePath += "/";
 }
+console.log(pathElements);
+console.log(basePath);
 
 // ------------------------------------------------
 // --- Create and display list of Events
