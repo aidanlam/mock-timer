@@ -3,6 +3,7 @@
 body, .config {
   font-family: verdana, arial;
   font-size:  20pt;
+  background-color: black;
 }
 
 a,.config {
@@ -12,6 +13,7 @@ a,.config {
 .body, .timer {
   text-align: center;
   font-weight: bold;
+  background-color: black;
 }
 
 #timer_mss {
