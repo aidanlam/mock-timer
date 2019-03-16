@@ -736,7 +736,6 @@ function writeTimerDOM(iterationOddPhase,timeStr,timeColor,captionStr) {
   // --- Note
   var noteStrSep = "&nbsp;&nbsp;"
   var noteStr="";
-  noteStr += soundEnabled ? "S |" : "";
   noteStr += String.format(" {0:##.0}%",(100*(elapsedTimeRun/(elapsedTimeRun+elapsedTimeIdle))));
   noteStr += " skewAge " + mssStr(secsSinceLastSkewCalc) + " |";
   noteStr += String.format(" skew {0:####.000}s",Math.round(skewCurrentMS)/1000) + noteStrSep;
