@@ -70,7 +70,7 @@ function log_args() {
 }
 log_args();
 
-var enLogo       = ! enSimple;
+var enLogo       = 0; // ! enSimple;
 var enCaption    = ! enSimple;
 var enHeader     = ! enSimple;
 
@@ -690,6 +690,7 @@ function writeTimerDOM(iterationOddPhase,timeStr,timeColor,captionStr) {
   var hasHeadText = (data==null) ? "" : (data.headText.length>0) ? 1 : 0;
   if (enHeader && hasHeadText) {
     timerHeadTextEl.style.fontSize          = timerHeadTextFontSize + "pt";
+    timerHeadTextEl.style.color             = "white";
     timerHeadTextEl.innerHTML               = data.headText;
   } else {
     timerHeadTextEl.innerHTML               = "";
@@ -707,6 +708,7 @@ function writeTimerDOM(iterationOddPhase,timeStr,timeColor,captionStr) {
   var timerCaptionEl  = document.getElementById("timer_caption");
   if (enCaption) {
     timerCaptionEl.style.fontSize     = timerCaptionFontSize + "pt";
+    timerCaptionEl.style.color        = "white";
     timerCaptionEl.innerHTML          = captionStr.trim();
   } else {
     timerCaptionEl.style.display = "none";
@@ -734,7 +736,6 @@ function writeTimerDOM(iterationOddPhase,timeStr,timeColor,captionStr) {
   // --- Note
   var noteStrSep = "&nbsp;&nbsp;"
   var noteStr="";
-  noteStr += soundEnabled ? "S |" : "";
   noteStr += String.format(" {0:##.0}%",(100*(elapsedTimeRun/(elapsedTimeRun+elapsedTimeIdle))));
   noteStr += " skewAge " + mssStr(secsSinceLastSkewCalc) + " |";
   noteStr += String.format(" skew {0:####.000}s",Math.round(skewCurrentMS)/1000) + noteStrSep;
@@ -746,6 +747,7 @@ function writeTimerDOM(iterationOddPhase,timeStr,timeColor,captionStr) {
   if (enSimple) {
     timerNoteEl.innerHTML = "";    
   } else {
+    //timerNoteEl.style.color = "white";    
     timerNoteEl.innerHTML = noteStr;
   }
 
@@ -841,6 +843,8 @@ function updateTimerDOM(){
 
     var timeStr = mssStr(countdownTimeSec);
     var timeColor="grey";
+    var timeColor="black";
+    var timeColor="white";
     var captionStr  = "n/a";
 
     if (isClimb) {
@@ -853,6 +857,7 @@ function updateTimerDOM(){
       }
       captionStr = (data.transTime>0) ? "CLIMB" : "";
       timeColor = (countdownTimeSec>60) ? "black" : "red";
+      timeColor = (countdownTimeSec>60) ? "white" : "red";
       if (countdownTimeSec == 60) { playSound("oneMinWarning"); }
       if (countdownTimeSec == 10) { playSound("tenSecWarning"); }
     }
